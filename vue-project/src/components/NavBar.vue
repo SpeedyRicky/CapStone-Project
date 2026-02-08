@@ -57,7 +57,7 @@
  * - Shopping cart with item count
  */
 
-import { useCartStore } from '@/stores/cartStore'
+import { useCartStore } from "@/stores/cartStore.js";
 
 // =====================================================
 // STATE & STORES
