@@ -1,6 +1,6 @@
 <template>
   <div class="cart-page">
-    <h1>Shopping Cart</h1>
+    <h1 class="cart-title">Shopping Cart</h1>
 
     <div v-if="cartStore.items.length === 0" class="empty-cart">
       <div class="empty-icon" aria-hidden="true"></div>
@@ -101,7 +101,7 @@ const cartStore = useCartStore()
   padding: 40px 20px;
 }
 
-.cart-page h1 {
+.cart-title {
   font-size: 2rem;
   margin-bottom: 40px;
   color: #ffffff;
