@@ -68,6 +68,8 @@
             <span>Total:</span>
             <span>${{ cartStore.total.toFixed(2) }}</span>
           </div>
+          
+          <!-- Shipping removed -->
 
            <div class="taxes">
             <span> Tax: ${{ cartStore.tax.toFixed(2) }}</span>
