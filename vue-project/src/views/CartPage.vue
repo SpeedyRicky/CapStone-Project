@@ -70,10 +70,14 @@
           </div>
           
           <!-- Shipping removed -->
-
-           <div class="taxes">
+           <div class="summary-row">
+            <span>Shipping:</span>
+            <span :class="cartStore.shipping === 0 ? 'free' : ''">
+              {{ cartStore.shipping === 0 ? 'Free' : '$' + cartStore.shipping.toFixed(2) }}
+            </span>
+           <!-- <div class="taxes">
             <span> Tax: ${{ cartStore.tax.toFixed(2) }}</span>
-           </div>
+           </div> -->
 
           <router-link to="/checkout" class="checkout-btn">Proceed to Checkout</router-link>
 
