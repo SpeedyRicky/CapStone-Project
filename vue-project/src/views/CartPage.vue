@@ -69,7 +69,9 @@
             <span>${{ cartStore.total.toFixed(2) }}</span>
           </div>
 
-          <!-- shipping removed -->
+           <div class="taxes">
+            <span> Tax: ${{ cartStore.tax.toFixed(2) }}</span>
+           </div>
 
           <router-link to="/checkout" class="checkout-btn">Proceed to Checkout</router-link>
 
