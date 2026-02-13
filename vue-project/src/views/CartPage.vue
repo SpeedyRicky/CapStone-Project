@@ -104,7 +104,7 @@ const cartStore = useCartStore()
 .cart-page h1 {
   font-size: 2rem;
   margin-bottom: 40px;
-  color: #1f2937;
+  color: #ffffff;
   font-weight: 700;
 }
 
