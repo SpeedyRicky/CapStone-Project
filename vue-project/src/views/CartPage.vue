@@ -70,11 +70,11 @@
           </div>
           
           <!-- Shipping removed -->
-           <div class="summary-row">
+           <!-- <div class="summary-row">
             <span>Shipping:</span>
             <span :class="cartStore.shipping === 0 ? 'free' : ''">
               {{ cartStore.shipping === 0 ? 'Free' : '$' + cartStore.shipping.toFixed(2) }}
-            </span>
+            </span> -->
            <!-- <div class="taxes">
             <span> Tax: ${{ cartStore.tax.toFixed(2) }}</span>
            </div> -->

@@ -1,5 +1,8 @@
 {
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.4"
+  },
+  "dependencies": {
+    "@paystack/inline-js": "^2.22.7"
   }
 }
