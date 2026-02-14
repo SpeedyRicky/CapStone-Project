@@ -97,10 +97,24 @@
             <span>${{ cartStore.subtotal.toFixed(2) }}</span>
           </div>
 
-          <div class="summary-total">
+          <template>
+  <div class="checkout-container">
+    <h2>Order Total: ₦{{ totalAmount }}</h2>
+
+    <button 
+      class="pay-button" 
+      @click="payWithPaystack"
+      :disabled="isProcessing"
+    >
+      {{ isProcessing ? 'Opening Checkout...' : 'Pay Now' }}
+    </button>
+  </div>
+</template>
+
+          <!-- <div class="summary-total">
             <span>Total</span>
             <span>${{ cartStore.total.toFixed(2) }}</span>
-          </div>
+          </div> -->
 
           <router-link to="/cart" class="back-to-cart">← Back to Cart</router-link>
         </div>
