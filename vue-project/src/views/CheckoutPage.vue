@@ -96,7 +96,7 @@
             <span>Subtotal</span>
             <span>${{ cartStore.subtotal.toFixed(2) }}</span>
           </div>
-          
+
 <div class="summary-total">
           <template>
   <div class="checkout-container">
@@ -125,61 +125,66 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { useCartStore } from '@/stores/cartStore'
-import { useOrderStore } from '@/stores/orderStore'
+import { ref, computed } from 'vue';
 
-const router = useRouter()
-const cartStore = useCartStore()
-const orderStore = useOrderStore()
 
-const form = ref({
-  firstName: '',
-  lastName: '',
-  email: ''
-})
 
-const agreeToTerms = ref(false)
-const loading = ref(false)
-// Mock payment flow — no Stripe integration in demo mode
 
-const processPayment = async () => {
-  if (!form.value.firstName || !form.value.lastName || !form.value.email) {
-    alert('Please fill in all required fields')
-    return
-  }
+// import { ref } from 'vue'
+// import { useRouter } from 'vue-router'
+// import { useCartStore } from '@/stores/cartStore'
+// import { useOrderStore } from '@/stores/orderStore'
 
-  loading.value = true
+// const router = useRouter()
+// const cartStore = useCartStore()
+// const orderStore = useOrderStore()
 
-  try {
-    // Mock payment processing (fake delay)
-    await new Promise((res) => setTimeout(res, 1000))
-    const paymentMethod = { paymentMethod: { id: 'pm_mock_' + Date.now() } }
+// const form = ref({
+//   firstName: '',
+//   lastName: '',
+//   email: ''
+// })
 
-    // Create order
-    const order = orderStore.createOrder({
-      items: cartStore.items,
-      subtotal: cartStore.subtotal,
-      total: cartStore.total,
-      customer: {
-        firstName: form.value.firstName,
-        lastName: form.value.lastName,
-        email: form.value.email
-      },
-      paymentMethodId: paymentMethod.paymentMethod.id
-    })
+// const agreeToTerms = ref(false)
+// const loading = ref(false)
+// // Mock payment flow — no Stripe integration in demo mode
 
-    // Clear cart and redirect
-    cartStore.clearCart()
-    router.push(`/order-confirmation/${order.id}`)
-  } catch (error) {
-    console.error('Payment error:', error)
-    alert('An error occurred during payment. Please try again.')
-  } finally {
-    loading.value = false
-  }
-}
+// const processPayment = async () => {
+//   if (!form.value.firstName || !form.value.lastName || !form.value.email) {
+//     alert('Please fill in all required fields')
+//     return
+//   }
+
+//   loading.value = true
+
+//   try {
+//     // Mock payment processing (fake delay)
+//     await new Promise((res) => setTimeout(res, 1000))
+//     const paymentMethod = { paymentMethod: { id: 'pm_mock_' + Date.now() } }
+
+//     // Create order
+//     const order = orderStore.createOrder({
+//       items: cartStore.items,
+//       subtotal: cartStore.subtotal,
+//       total: cartStore.total,
+//       customer: {
+//         firstName: form.value.firstName,
+//         lastName: form.value.lastName,
+//         email: form.value.email
+//       },
+//       paymentMethodId: paymentMethod.paymentMethod.id
+//     })
+
+//     // Clear cart and redirect
+//     cartStore.clearCart()
+//     router.push(`/order-confirmation/${order.id}`)
+//   } catch (error) {
+//     console.error('Payment error:', error)
+//     alert('An error occurred during payment. Please try again.')
+//   } finally {
+//     loading.value = false
+//   }
+// }
 </script>
 
 <style scoped>
@@ -516,4 +521,20 @@ const processPayment = async () => {
     padding: 25px;
   }
 }
+
+.pay-button {
+  background-color: #011b33; /* Paystack Blue-ish */
+  color: white;
+  padding: 15px 30px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.pay-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
 </style>
