@@ -1,4 +1,5 @@
 <template>
+
   <div class="cart-page">
     <h1 class="cart-title">Shopping Cart</h1>
 
@@ -69,6 +70,10 @@
             <span>${{ cartStore.total.toFixed(2) }}</span>
           </div>
           
+            <div class="checkout-page">
+    <h2>Total: {{ totalPrice }}</h2>
+    <button @click="initiatePayment" class="btn-pay">Pay with Paystack</button>
+  </div>
           <!-- Shipping removed -->
            <!-- <div class="summary-row">
             <span>Shipping:</span>
@@ -97,9 +102,33 @@
 </template>
 
 <script setup>
-import { useCartStore } from '@/stores/cartStore'
+import { ref } from 'vue';
 
-const cartStore = useCartStore()
+// Replace with your actual total from your cart logic
+const totalPrice = ref(5000); 
+
+const initiatePayment = () => {
+  const handler = window.PaystackPop.setup({
+    key: 'pk_test_xxxxxxxxxx', // Your Public Key
+    email: 'user@example.com',
+    amount: totalPrice.value * 100, // Paystack uses Kobo/Cents
+    currency: 'NGN',
+    callback: (response) => {
+      console.log('Payment success!', response.reference);
+      // Here: Send response.reference to your backend
+      alert('Transaction successful: ' + response.reference);
+    },
+    onClose: () => {
+      alert('You closed the window.');
+    }
+  });
+  handler.openIframe();
+};
+
+
+// import { useCartStore } from '@/stores/cartStore'
+
+// const cartStore = useCartStore()
 </script>
 
 <style scoped>
