@@ -97,21 +97,6 @@
             <span>${{ cartStore.subtotal.toFixed(2) }}</span>
           </div>
 
-
-          <!-- <template>
-  <div class="checkout-container">
-    <h2>Order Total: ₦{{ totalAmount }}</h2>
-
-    <button 
-      class="pay-button" 
-      @click="payWithPaystack"
-      :disabled="isProcessing"
-    >
-      {{ isProcessing ? 'Opening Checkout...' : 'Pay Now' }}
-    </button>
-  </div>
-</template> -->
-
           <div class="summary-total">
              <span>Total</span>
             <span>${{ cartStore.total.toFixed(2) }}</span> 
@@ -126,48 +111,11 @@
 </template>
 
 <script setup>
-// import { ref, computed } from 'vue';
-
-
-// // 1. Define your data (Usually these come from your Vuex/Pinia store or props)
-// const email = ref('customer@email.com'); 
-// const totalAmount = ref(5000); // The amount in Naira
-// const isProcessing = ref(false);
-
-// // 2. The Paystack Logic
-// const payWithPaystack = () => {
-//   isProcessing.value = true;
-
-//   // We use 'window.PaystackPop' because it's loaded globally via the script tag in index.html
-//   const handler = window.PaystackPop.setup({
-//     key: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY, // Use your .env variable here
-//     email: email.value,
-//     amount: totalAmount.value * 100, // Paystack expects Kobo (Naira * 100)
-//     currency: 'NGN',
-    
-//     callback: (response) => {
-//       isProcessing.value = false;
-//       console.log('Payment Successful! Reference:', response.reference);
-      
-//       // SUCCESS: Route the user to a "Thank You" page or update your database
-//       // router.push('/success'); 
-//     },
-//     onClose: () => {
-//       isProcessing.value = false;
-//       alert('Transaction cancelled.');
-//     }
-//   });
-
-//   handler.openIframe();
-// };
 
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCartStore } from '@/stores/cartStore'
 import { useOrderStore } from '@/stores/orderStore'
-import Paystack from '@paystack/inline-js';
-
-const popup = new Paystack()
 const router = useRouter()
 const cartStore = useCartStore()
 const orderStore = useOrderStore()
