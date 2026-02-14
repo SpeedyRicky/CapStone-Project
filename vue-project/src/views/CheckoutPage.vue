@@ -113,7 +113,7 @@
 </template> -->
 
           <div class="summary-total">
-     </div>       <span>Total</span>
+             <span>Total</span>
             <span>${{ cartStore.total.toFixed(2) }}</span> 
 </div>
 
