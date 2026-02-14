@@ -129,9 +129,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCartStore } from '@/stores/cartStore'
 import { useOrderStore } from '@/stores/orderStore'
-import Paystack from '@paystack/inline-js';
 
-const popup = new Paystack()
 const router = useRouter()
 const cartStore = useCartStore()
 const orderStore = useOrderStore()
