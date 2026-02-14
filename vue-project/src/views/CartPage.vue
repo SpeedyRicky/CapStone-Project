@@ -1,5 +1,5 @@
 <template>
-
+  
   <div class="cart-page">
     <h1 class="cart-title">Shopping Cart</h1>
 
@@ -70,10 +70,6 @@
             <span>${{ cartStore.total.toFixed(2) }}</span>
           </div>
           
-            <div class="checkout-page">
-    <h2>Total: {{ totalPrice }}</h2>
-    <button @click="initiatePayment" class="btn-pay">Pay with Paystack</button>
-  </div>
           <!-- Shipping removed -->
            <!-- <div class="summary-row">
             <span>Shipping:</span>
