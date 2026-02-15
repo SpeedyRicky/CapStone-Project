@@ -22,7 +22,7 @@ export const useProductStore = defineStore('products', () => {
     {
       id: 1,
       name: 'Premium Wireless Headphones',
-      price: 10000.00,
+      price: 50.99,
       category: 'electronics',
       image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&h=500&fit=crop',
       description: 'High-quality wireless headphones with noise cancellation and 30-hour battery life.',
@@ -32,7 +32,7 @@ export const useProductStore = defineStore('products', () => {
     {
       id: 2,
       name: 'Ultra-Slim Laptop',
-      price: 10000.00,
+      price: 500.1,
       category: 'electronics',
       image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=500&h=500&fit=crop',
       description: 'Lightweight laptop perfect for professionals with stunning display and powerful processor.',
@@ -42,7 +42,7 @@ export const useProductStore = defineStore('products', () => {
     {
       id: 3,
       name: 'Smart Watch Pro',
-      price: 10000.00,
+      price: 1000.00,
       category: 'electronics',
       image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&h=500&fit=crop',
       description: 'Advanced smartwatch with health tracking and seamless smartphone integration.',
@@ -52,7 +52,7 @@ export const useProductStore = defineStore('products', () => {
     {
       id: 4,
       name: 'Premium Camera',
-      price: 10000.00,
+      price: 300.00,
       category: 'accessories',
       image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREu4zWGDbxZjANc1pnoAjASEyRxEggie0ddg&s',
       description: 'Professional-grade digital camera with 4K video and exceptional low-light performance.',
@@ -62,7 +62,7 @@ export const useProductStore = defineStore('products', () => {
     {
       id: 5,
       name: 'Portable Speaker',
-      price: 10000.00,
+      price: 100.00,
       category: 'accessories',
       image: 'https://www.canex.ca/media/catalog/product/i/q/iq-wave-party-portable-bluetooth-speaker-black-ea1-059497279277_b-nznip.jpg?width=560&height=560&quality=80&bg-color=255,255,255&fit=bounds',
       description: 'Waterproof portable speaker with rich bass and 12-hour battery.',
@@ -72,7 +72,7 @@ export const useProductStore = defineStore('products', () => {
     {
       id: 6,
       name: 'USB-C Hub Pro',
-      price: 10000.00,
+      price: 125.00,
       category: 'accessories',
       image: 'https://images.unsplash.com/photo-1625948515291-69613efd103f?w=500&h=500&fit=crop',
       description: 'Multi-port USB-C hub with Ethernet and 4K HDMI support.',
