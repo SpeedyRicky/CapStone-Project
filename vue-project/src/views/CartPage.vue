@@ -98,33 +98,32 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+// import { ref } from 'vue';
+import { useCartStore } from '@/stores/cartStore'
 
+const cartStore = useCartStore()
 // Replace with your actual total from your cart logic
-const totalPrice = ref(5000); 
+// const totalPrice = ref(5000); 
 
-const initiatePayment = () => {
-  const handler = window.PaystackPop.setup({
-    key: 'pk_test_xxxxxxxxxx', // Your Public Key
-    email: 'user@example.com',
-    amount: totalPrice.value * 100, // Paystack uses Kobo/Cents
-    currency: 'NGN',
-    callback: (response) => {
-      console.log('Payment success!', response.reference);
-      // Here: Send response.reference to your backend
-      alert('Transaction successful: ' + response.reference);
-    },
-    onClose: () => {
-      alert('You closed the window.');
-    }
-  });
-  handler.openIframe();
-};
+// const initiatePayment = () => {
+//   const handler = window.PaystackPop.setup({
+//     key: 'pk_test_xxxxxxxxxx', // Your Public Key
+//     email: 'user@example.com',
+//     amount: totalPrice.value * 100, // Paystack uses Kobo/Cents
+//     currency: 'NGN',
+//     callback: (response) => {
+//       console.log('Payment success!', response.reference);
+//       // Here: Send response.reference to your backend
+//       alert('Transaction successful: ' + response.reference);
+//     },
+//     onClose: () => {
+//       alert('You closed the window.');
+//     }
+//   });
+//   handler.openIframe();
+// };
 
 
-// import { useCartStore } from '@/stores/cartStore'
-
-// const cartStore = useCartStore()
 </script>
 
 <style scoped>
