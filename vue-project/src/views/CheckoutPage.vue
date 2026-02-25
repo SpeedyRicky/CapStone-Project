@@ -112,11 +112,24 @@
 </template>
 
 <script setup>
+import { Form, Field, ErrorMessage } from "vee-validate";
+import { string, object } from "yup";
+import { useCartStore } from "../stores/cartStore";
+import Checkoutitem from "../components/checkoutitem.vue";
+import PaystackPop from '@paystack/inline-js'
+import { useRouter } from "vue-router";
+import { computed,unref } from "vue";
+import { toast } from "vue3-toastify";
 
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { useCartStore } from '@/stores/cartStore'
-import { useOrderStore } from '@/stores/orderStore'
+const mySchema = object({
+  email: string().email().required("Email is required"),
+  phone: string()
+    .min(11, "Phone number must be at least 10 digits")
+    .required("Phone number is required"),
+    name: string().required("Name is required"),
+  shipping: string().required("Shipping address is required")
+});
+
 const router = useRouter()
 const cartStore = useCartStore()
 const orderStore = useOrderStore()
