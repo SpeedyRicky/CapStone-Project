@@ -64,7 +64,7 @@
         </div>
 
         <button 
-          @click="processPayment" 
+          @click="handlepayment" 
           :disabled="loading || !agreeToTerms"
           class="submit-btn"
         >
@@ -112,73 +112,217 @@
 </template>
 
 <script setup>
-import { Form, Field, ErrorMessage } from "vee-validate";
-import { string, object } from "yup";
+import { ref, computed, unref } from 'vue'
 import { useCartStore } from "../stores/cartStore";
-import Checkoutitem from "../components/checkoutitem.vue";
 import PaystackPop from '@paystack/inline-js'
 import { useRouter } from "vue-router";
-import { computed,unref } from "vue";
-import { toast } from "vue3-toastify";
-
-const mySchema = object({
-  email: string().email().required("Email is required"),
-  phone: string()
-    .min(11, "Phone number must be at least 10 digits")
-    .required("Phone number is required"),
-    name: string().required("Name is required"),
-  shipping: string().required("Shipping address is required")
-});
-
-const router = useRouter()
-const cartStore = useCartStore()
-const orderStore = useOrderStore()
 
 const form = ref({
-  firstName: '',
+ firstName: '',
   lastName: '',
-  email: ''
+  email: '',
 })
-
 const agreeToTerms = ref(false)
 const loading = ref(false)
+const router = useRouter()
+const cartStore = useCartStore();
 
-const processPayment = async () => {
+const handlepayment = () => {
+  if (cartStore.isEmpty || cartStore.total <= 0) {
+    alert('Your cart is empty!')
+    return
+  }
+
   if (!form.value.firstName || !form.value.lastName || !form.value.email) {
     alert('Please fill in all required fields')
     return
   }
 
+  if (!agreeToTerms.value) {
+    alert('You must agree to the terms and conditions to proceed.')
+    return
+  }
+
   loading.value = true
 
+  const paystack = new PaystackPop()
+
   try {
-    // Mock payment processing (fake delay)
-    await new Promise((res) => setTimeout(res, 1000))
-    const paymentMethod = { paymentMethod: { id: 'pm_mock_' + Date.now() } }
+    paystack.newTransaction({
+      key: paystackuserkey,
+      amount: payAmount.value, // already in kobo
+      email: form.value.email,
+      reference: payReference.value,
 
-    // Create order
-    const order = orderStore.createOrder({
-      items: cartStore.items,
-      subtotal: cartStore.subtotal,
-      total: cartStore.total,
-      customer: {
-        firstName: form.value.firstName,
-        lastName: form.value.lastName,
-        email: form.value.email
+      onSuccess: (transaction) => {
+        console.log('Payment successful!', transaction)
+
+        cartStore.clearCart()
+
+        router.push({
+          name: 'confirmation',
+          query: {
+            reference: payReference.value,
+            amount: payAmount.value,
+            email: form.value.email,
+            name: `${form.value.firstName} ${form.value.lastName}`
+          }
+        })
       },
-      paymentMethodId: paymentMethod.paymentMethod.id
-    })
 
-    // Clear cart and redirect
-    cartStore.clearCart()
-    router.push(`/order-confirmation/${order.id}`)
+      onCancel: () => {
+        console.log('Payment cancelled')
+        loading.value = false
+        alert('Payment cancelled.')
+      }
+    })
   } catch (error) {
-    console.error('Payment error:', error)
-    alert('An error occurred during payment. Please try again.')
-  } finally {
+    console.error('Paystack error:', error)
     loading.value = false
+    alert('Payment initialization failed.')
   }
 }
+
+
+// Payment handling logic
+
+// const handlepayment = () => {
+//   if (cartstore.isEmpty || cartstore.total <= 0) {
+//     alert('Your cart is empty!')
+//     return
+//   }
+
+//   if(!form.value.email || !form.value.name) {
+//     alert('Please fill in all required fields')
+//     return
+//   }
+
+//   if (!agreeToTerms.value) {
+//     alert('You must agree to the terms and conditions to proceed.')
+//     return
+//   }
+  
+//     loading.value = true
+
+//   const paystack = new PaystackPop()
+
+//   try {
+//     paystack.newTransaction({
+//       key: paystackuserkey,
+//       amount: payAmount.value,
+//       email: values.email,
+//       reference: payReference.value,
+      
+//       onSuccess: (transaction) => {
+        
+//         console.log('Payment successful!', transaction)
+        
+//         router.push({
+//           name: 'confirmation',
+//           query: { 
+//             reference: unref(payReference),
+//             amount: unref(payAmount),
+//             email: values.email,
+//             name: values.name,
+//             phone: values.phone
+//           }
+//         })
+
+//         cartstore.clearCart()
+//       },
+      
+//       onCancel: () => {
+//         console.log('Payment cancelled')
+//         toast.error('Payment cancelled. You can try again when ready.')
+//       }
+//     })
+//   } catch (error) {
+//     console.error('Paystack error:', error)
+//     toast.error('Payment initialization failed. Please try again.')
+//   }
+
+// };
+
+
+
+const paystackuserkey = import.meta.env.VITE_PAYSTACK_PUBLIC_KEY
+
+const payAmount = computed(() => {
+  return Math.round(cartStore.total * 100)
+})
+
+const payReference = computed(() => {
+  let text = ""
+  const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+
+  for (let i = 0; i < 10; i++) {
+    text += possible.charAt(Math.floor(Math.random() * possible.length))
+  }
+
+  return `REF-${Date.now()}-${text}`
+})
+
+const formatPrice = (price) => {
+  return `₦${price.toLocaleString('en-NG',{minimumFractionDigits: 2,maximumFractionDigits: 2})}`;
+};
+
+//old mock payment logic
+
+// import { ref } from 'vue'
+// import { useRouter } from 'vue-router'
+// import { useCartStore } from '@/stores/cartStore'
+// import { useOrderStore } from '@/stores/orderStore'
+
+
+// const router = useRouter()
+// const cartStore = useCartStore()
+// const orderStore = useOrderStore()
+
+// const form = ref({
+//   firstName: '',
+//   lastName: '',
+//   email: ''
+// })
+
+// const agreeToTerms = ref(false)
+// const loading = ref(false)
+
+// const processPayment = async () => {
+//   if (!form.value.firstName || !form.value.lastName || !form.value.email) {
+//     alert('Please fill in all required fields')
+//     return
+//   }
+
+//   loading.value = true
+
+//   try {
+
+//     await new Promise((res) => setTimeout(res, 1000))
+//     const paymentMethod = { paymentMethod: { id: 'pm_mock_' + Date.now() } }
+
+//     // Create order
+//     const order = orderStore.createOrder({
+//       items: cartStore.items,
+//       subtotal: cartStore.subtotal,
+//       total: cartStore.total,
+//       customer: {
+//         firstName: form.value.firstName,
+//         lastName: form.value.lastName,
+//         email: form.value.email
+//       },
+//       paymentMethodId: paymentMethod.paymentMethod.id
+//     })
+
+//     // Clear cart and redirect
+//     cartStore.clearCart()
+//     router.push(`/order-confirmation/${order.id}`)
+//   } catch (error) {
+//     console.error('Payment error:', error)
+//     alert('An error occurred during payment. Please try again.')
+//   } finally {
+//     loading.value = false
+//   }
+// }
 </script>
 
 <style scoped>
