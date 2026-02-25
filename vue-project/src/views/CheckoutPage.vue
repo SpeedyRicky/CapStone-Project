@@ -145,32 +145,46 @@ const handlepayment = () => {
 
   loading.value = true
 
-  generateReference()
-
   const paystack = new PaystackPop()
 
-  paystack.newTransaction({
-    key: paystackuserkey,
-    amount: payAmount.value,
-    email: form.value.email,
-    reference: payReference.value,
+  try {
+    generateReference()
+    paystack.newTransaction({
+      key: paystackuserkey,
+      amount: payAmount.value, // already in kobo
+      email: form.value.email,
+      reference: payReference.value,
 
-    onSuccess: (transaction) => {
-      console.log('Payment successful!', transaction)
+      onSuccess: (transaction) => {
+        console.log('Payment successful!', transaction)
 
+        cartStore.clearCart()
 
-      loading.value = false
-      cartStore.clearCart()
+        router.push({
+          name: 'confirmation',
+          query: {
+            reference: payReference.value,
+            amount: payAmount.value,
+            email: form.value.email,
+            name: `${form.value.firstName} ${form.value.lastName}`
 
+          }
+        })
+      },
 
-    },
-
-    onCancel: () => {
-      loading.value = false
-      alert('Payment cancelled.')
-    }
-  })
+      onCancel: () => {
+        console.log('Payment cancelled')
+        loading.value = false
+        alert('Payment cancelled.')
+      }
+    })
+  } catch (error) {
+    console.error('Paystack error:', error)
+    loading.value = false
+    alert('Payment initialization failed.')
+  }
 }
+
 
 // Payment handling logic
 
