@@ -145,44 +145,32 @@ const handlepayment = () => {
 
   loading.value = true
 
+  generateReference()
+
   const paystack = new PaystackPop()
 
-  try {
-    paystack.newTransaction({
-      key: paystackuserkey,
-      amount: payAmount.value, // already in kobo
-      email: form.value.email,
-      reference: payReference.value,
+  paystack.newTransaction({
+    key: paystackuserkey,
+    amount: payAmount.value,
+    email: form.value.email,
+    reference: payReference.value,
 
-      onSuccess: (transaction) => {
-        console.log('Payment successful!', transaction)
+    onSuccess: (transaction) => {
+      console.log('Payment successful!', transaction)
 
-        cartStore.clearCart()
 
-        router.push({
-          name: 'confirmation',
-          query: {
-            reference: payReference.value,
-            amount: payAmount.value,
-            email: form.value.email,
-            name: `${form.value.firstName} ${form.value.lastName}`
-          }
-        })
-      },
+      loading.value = false
+      cartStore.clearCart()
 
-      onCancel: () => {
-        console.log('Payment cancelled')
-        loading.value = false
-        alert('Payment cancelled.')
-      }
-    })
-  } catch (error) {
-    console.error('Paystack error:', error)
-    loading.value = false
-    alert('Payment initialization failed.')
-  }
+
+    },
+
+    onCancel: () => {
+      loading.value = false
+      alert('Payment cancelled.')
+    }
+  })
 }
-
 
 // Payment handling logic
 
@@ -251,16 +239,18 @@ const payAmount = computed(() => {
   return Math.round(cartStore.total * 100)
 })
 
-const payReference = computed(() => {
-  let text = ""
+const payReference = ref("")
+
+const generateReference = () => {
   const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+  let text = ""
 
   for (let i = 0; i < 10; i++) {
     text += possible.charAt(Math.floor(Math.random() * possible.length))
   }
 
-  return `REF-${Date.now()}-${text}`
-})
+  payReference.value = `REF-${Date.now()}-${text}`
+}
 
 const formatPrice = (price) => {
   return `₦${price.toLocaleString('en-NG',{minimumFractionDigits: 2,maximumFractionDigits: 2})}`;
